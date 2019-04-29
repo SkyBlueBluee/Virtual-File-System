@@ -1,0 +1,12 @@
+
+*.db
+Virtual File System/.vs/Virtual File System/v15/.suo
+*.opendb
+*.ipch
+*.ilk
+*.pdb
+*.tlog
+*.pch
+*.res
+*.obj
+*.idb
