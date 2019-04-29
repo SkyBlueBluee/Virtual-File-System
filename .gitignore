@@ -10,3 +10,6 @@ Virtual File System/.vs/Virtual File System/v15/.suo
 *.res
 *.obj
 *.idb
+Virtual File System/Virtual File System/Debug/Virtual File System.Build.CppClean.log
+Virtual File System/Virtual File System/Debug/Virtual File System.log
+Virtual File System/Debug/Virtual File System.exe
