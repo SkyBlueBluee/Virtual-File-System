@@ -33,6 +33,12 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VFS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestSys.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -58,6 +64,12 @@
     </ClCompile>
     <ClCompile Include="..\dep\opengl\gl_core_4_4.c">
       <Filter>dep\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="VFS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestSys.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

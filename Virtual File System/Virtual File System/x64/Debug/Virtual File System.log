@@ -1,5 +1,7 @@
-﻿  imgui_impl_opengl3.cpp
-  gl_core_4_4.c
-  wgl_core_4_4.c
+﻿  stdafx.cpp
+  imgui_impl_opengl3.cpp
+  main.cpp
+  TestSys.cpp
   Generating Code...
-  Virtual File System.vcxproj -> C:\Users\HP\Desktop\Virtual-File-System\Virtual File System\x64\Debug\Virtual File System.exe
+MSVCRTD.lib(exe_winmain.obj) : error LNK2019: unresolved external symbol WinMain referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+C:\Users\HP\Desktop\Virtual-File-System\Virtual File System\x64\Debug\Virtual File System.exe : fatal error LNK1120: 1 unresolved externals
