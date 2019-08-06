@@ -75,8 +75,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\HP\Desktop\Virtual-File-System\VFS\dep\glfw-3.2.1\include;C:\Users\HP\Desktop\Virtual-File-System\VFS\dep\glew-2.1.0\include;C:\Users\HP\Desktop\Virtual-File-System\VFS\dep\imgui;C:\Users\HP\Desktop\Virtual-File-System\VFS\dep;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\HP\Desktop\Virtual-File-System\VFS\dep\glew-2.1.0\lib\Release\x64;C:\Users\HP\Desktop\Virtual-File-System\VFS\dep\glfw-3.2.1\lib-vc2015;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)dep\glfw-3.2.1\include;$(SolutionDir)dep\glew-2.1.0\include;$(SolutionDir)dep\imgui;$(SolutionDir)dep\assimp\include;$(SolutionDir)dep;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\dep\assimp\lib;$(SolutionDir)\dep\glew-2.1.0\lib\Release\x64;$(SolutionDir)\dep\glfw-3.2.1\lib-vc2015;$(LibraryPath)</LibraryPath>
     <OutDir>..\bin</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -116,7 +116,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -159,6 +159,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Editor.h" />
+    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GraphicsIncludes.h" />
+    <ClInclude Include="Header.h" />
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="TestSys.h" />
     <ClInclude Include="VFS.h" />
   </ItemGroup>
@@ -170,7 +176,11 @@
     <ClCompile Include="..\dep\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\dep\opengl\gl_core_4_4.c" />
     <ClCompile Include="..\dep\opengl\wgl_core_4_4.c" />
+    <ClCompile Include="Editor.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="TestSys.cpp" />
     <ClCompile Include="VFS.cpp" />
   </ItemGroup>

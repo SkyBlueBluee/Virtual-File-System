@@ -68,7 +68,9 @@ public:
 	// Use the alias path. No allocation is done. Should create the file if the file cannot be found?
 	VFS_ERROR file_load(const char* path, FileHandle& handle);
 	
-	
+	void Init();
+	void Update(float dt);
+	void Shutdown();
 private:
 
 };

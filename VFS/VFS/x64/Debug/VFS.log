@@ -1,5 +1,15 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  imgui.cpp
+  imgui_draw.cpp
+  imgui_impl_glfw.cpp
   imgui_impl_opengl3.cpp
+  imgui_widgets.cpp
   main.cpp
+  TestSys.cpp
+  VFS.cpp
   Generating Code...
+  gl_core_4_4.c
+  wgl_core_4_4.c
+  Generating Code...
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   VFS.vcxproj -> C:\Users\HP\Desktop\Virtual-File-System\VFS\VFS\..\bin\VFS.exe
