@@ -1,6 +1,7 @@
 #include "Core.h"
 #include "Graphics.h"
 #include "VFS.h"
+#include "Editor.h"
 
 Core* Core::instance_ = new Core{};
 
@@ -13,6 +14,9 @@ void Core::Init()
 
 	vfs_ = new VFS{};
 	vfs_->Init();
+
+	editor_ = new Editor{};
+	editor_->Init();
 
 	// Misc settings
 	is_running_ = true;
@@ -37,6 +41,7 @@ void Core::Run()
 	// Update all systems.
 	vfs_->Update(dt_);
 	graphics_->Update(dt_);
+	editor_->Update(dt_);
 	
 	// Poll events and swap buffers
 	glfwPollEvents();
@@ -48,6 +53,7 @@ void Core::Shutdown()
 	// Should cleanup opposite direction from adding
 	graphics_->Shutdown();
 	vfs_->Shutdown();
+	editor_->Shutdown();
 }
 
 Core * Core::Get()

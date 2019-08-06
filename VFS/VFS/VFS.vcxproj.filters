@@ -36,9 +36,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestSys.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
@@ -54,17 +51,20 @@
     <ClInclude Include="Core.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="VFS.h">
-      <Filter>Source Files\VFS</Filter>
-    </ClInclude>
     <ClInclude Include="Editor.h">
       <Filter>Source Files\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dep\stb_image.h">
+      <Filter>Source Files\dep</Filter>
+    </ClInclude>
+    <ClInclude Include="VFS.h">
+      <Filter>Source Files\VFS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestSys.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\dep\opengl\gl_core_4_4.c">
       <Filter>Source Files\dep\opengl</Filter>
     </ClCompile>
@@ -95,14 +95,20 @@
     <ClCompile Include="Core.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="VFS.cpp">
-      <Filter>Source Files\VFS</Filter>
-    </ClCompile>
     <ClCompile Include="Editor.cpp">
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dep\stbi_image.cpp">
+      <Filter>Source Files\dep</Filter>
+    </ClCompile>
+    <ClCompile Include="VFS.cpp">
+      <Filter>Source Files\VFS</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -33,7 +33,7 @@ void Graphics::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Open a window and create its OpenGL context
-	window_ = glfwCreateWindow(	window_width_, window_height_,
+	window_ = glfwCreateWindow(	static_cast<int>(window_width_), static_cast<int>(window_height_),
 								"VFS & Animation Demo",
 								nullptr, nullptr);
 	// Error check
@@ -84,4 +84,12 @@ void Graphics::Shutdown()
 	
 	glfwDestroyWindow(window_);
 	glfwTerminate();
+}
+
+void Graphics::PreUpdate()
+{
+}
+
+void Graphics::PostUpdate()
+{
 }

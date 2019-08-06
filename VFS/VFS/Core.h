@@ -2,7 +2,7 @@
 
 class Graphics;
 class VFS;
-
+class Editor;
 class Core
 {
 public:
@@ -30,6 +30,7 @@ private:
 	// Private methods
 	Graphics* graphics_;
 	VFS* vfs_;
+	Editor* editor_;
 	// Systems
 	// std::vector<ISystem*> systems_vec;						// For looping
 	// std::unordered_map<std::type_index, ISystem*> systems;	// For lookup
