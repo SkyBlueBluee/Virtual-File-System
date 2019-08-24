@@ -1,5 +1,4 @@
 #include "ModelManager.h"
-#include "Icosphere.h"
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 
@@ -17,31 +16,25 @@ ModelManager::~ModelManager()
 
 void ModelManager::Init()
 {
-	// Directly add an icosphere model
-	Icosphere* sphere = new Icosphere{};
-	sphere->name = "icosphere";
-	// sphere->isLoaded = true;
-	AddModel(sphere);
+	const char* extensions[] =
+	{
+		".obj",
+		".fbx",
+		".md5mesh"
+	};
 
 	// For every obj file found inside the models folder, we add it to the map.
 	// NOTE: We have not actually loaded the models yet. Models are loaded when the user first selects it.
-	std::string ext(".obj");
 	for (auto& p : fs::directory_iterator(MODEL_PATH))
 	{
-		if (p.path().extension() == ext)
+		std::string model_ext = p.path().extension().string();
+		for (auto& elem : extensions)
 		{
-			Model* model = new Model{ fs::path{ p }.string() };
-			AddModel(model);
-		}
-	}
-
-	ext = ".fbx";
-	for (auto& p : fs::directory_iterator(MODEL_PATH))
-	{
-		if (p.path().extension() == ext)
-		{
-			Model* model = new Model{ fs::path{ p }.string() };
-			AddModel(model);
+			if (model_ext == elem)
+			{
+				Model* model = new Model{ fs::path{ p }.string() };
+				AddModel(model);
+			}
 		}
 	}
 }

@@ -4,13 +4,11 @@
 
 // Wrapper for all the opengl headers
 #include "GraphicsIncludes.h"
-
 #include "ISystem.h"
-#include "Framebuffer.h"
 #include "ShaderManager.h"
 #include "ModelManager.h"
 #include "TextureManager.h"
-#include "FramebufferManager.h"
+
 class Graphics :public ISystem
 {
 public:
@@ -57,9 +55,6 @@ public:
 
 	// Textures
 	TextureManager textureManager;
-
-	// FrameBuffers
-	FrameBufferManager framebufferManager;
 
 private:
 	// Private Methods

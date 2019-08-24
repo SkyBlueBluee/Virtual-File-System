@@ -10,11 +10,11 @@ TextureManager::TextureManager()
 
 int TextureManager::Init()
 {
-	LoadPPM("metal_roof_spec_512x512.ppm", "A2_Specular");
-	LoadPPM("metal_roof_diff_512x512.ppm", "A2_Diffuse");
-	LoadJPG("checkerboard-rainbow.png", "Debug");
-	LoadJPG("skybox/left.jpg", "left");
-	loadSkybox();
+	// LoadPPM("metal_roof_spec_512x512.ppm", "A2_Specular");
+	// LoadPPM("metal_roof_diff_512x512.ppm", "A2_Diffuse");
+	// LoadJPG("checkerboard-rainbow.png", "Debug");
+	// LoadJPG("skybox/left.jpg", "left");
+	// loadSkybox();
 	return 0;
 }
 

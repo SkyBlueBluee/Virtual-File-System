@@ -60,8 +60,7 @@ int Graphics::Init()
 	shaderManager.Init();
 	modelManager.Init();
 	textureManager.Init();
-	framebufferManager.Init();
-
+	
 	return 0;
 }
 
@@ -94,8 +93,7 @@ void Graphics::Shutdown()
 {
 	textureManager.Shutdown();
 	shaderManager.Shutdown();
-	framebufferManager.Shutdown();
-
+	
 	glfwDestroyWindow(window);
 	glfwTerminate();
 }

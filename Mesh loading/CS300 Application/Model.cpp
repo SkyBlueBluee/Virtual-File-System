@@ -18,14 +18,16 @@ Model::Model(const std::string & p)
 	: Model()
 {
 	size_t start = p.find_last_of('\\') + 1;
-	size_t end = p.length() - 4;
+	size_t end = p.find_last_of('.');
 	name = p.substr(start, end - start);
 	path = p;
 }
 
 Model::~Model()
 {
-	glDeleteVertexArrays(1, &VAO);
+	glDeleteVertexArrays(1, &vao);
+	glDeleteVertexArrays(5, buffers);
+
 }
 
 int Model::LoadModel()
@@ -51,17 +53,8 @@ int Model::LoadModel(const std::string & path)
 		return -1;
 	}
 	
-	meshes.reserve(ai_scene->mNumMeshes);
-	
 	// Initialize mesh entries
-	for (size_t i = 0; i < ai_scene->mNumMeshes; ++i)
-	{
-		aiMesh* ai_mesh = ai_scene->mMeshes[i];
-		initMesh(ai_mesh);
-	}
-
-	normalizeMeshes();
-	initMeshBuffers();
+	initMeshes(ai_scene);
 	isLoaded = true;
 
 	return 0;
@@ -70,70 +63,85 @@ int Model::LoadModel(const std::string & path)
 int Model::Draw()
 {
 	// Bind the current VAO
-	glBindVertexArray(VAO);
+	glBindVertexArray(vao);
 
 	for (unsigned int i = 0; i < meshes.size(); i++) {
-		glBindBuffer(GL_ARRAY_BUFFER, meshes[i]->vbo);
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);	// pos
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3))); // norm
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3) * 2)); // uv
-
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshes[i]->ibo);
-
-		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(meshes[i]->indices.size()), GL_UNSIGNED_INT, 0);
+		
+		glDrawElementsBaseVertex( GL_TRIANGLES, 
+								  static_cast<GLsizei>(meshes[i].num_index), 
+								  GL_UNSIGNED_INT, 
+								  (void*)(sizeof(unsigned) * meshes[i].base_index), 
+								  meshes[i].base_vertex);
 	}
-	
+
+	glBindVertexArray(0);
 	return 0;
 }
 
-void Model::initMesh(const aiMesh* ai_mesh)
+void Model::initMeshes(const aiScene* ai_scene)
 {
-	std::vector<Vertex> vertices;
+	meshes.resize(ai_scene->mNumMeshes);
+
+	std::vector<glm::vec3> positions;
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> uvs;
 	std::vector<unsigned> indices;
 
-	vertices.reserve(ai_mesh->mNumVertices);
-	indices.reserve(ai_mesh->mNumFaces);
-	
+	unsigned num_vertices = 0, num_indices = 0;
 
-	const aiVector3D  zero{ 0.0f, 0.0f, 0.0f };
-	for (size_t i = 0; i < ai_mesh->mNumVertices; ++i)
+	for (size_t i = 0; i < ai_scene->mNumMeshes; ++i)
 	{
-		const aiVector3D* pos = &(ai_mesh->mVertices[i]);
-		const aiVector3D* normal = &(ai_mesh->mNormals[i]);
-		const aiVector3D* text = ai_mesh->HasTextureCoords(0) ? &(ai_mesh->mTextureCoords[0][i]) : &zero;
-		
-		Vertex vert;
-		
-		vert.position = glm::vec3{ pos->x, pos->y, pos->z };
-		vert.normal = glm::vec3{ normal->x, normal->y, normal->z};
-		vert.uv = glm::vec2{ text->x, text->y };
+		meshes[i].base_vertex = num_vertices;
+		meshes[i].base_index = num_indices;
 
-		vertices.emplace_back(vert);
+		meshes[i].num_vertex = ai_scene->mMeshes[i]->mNumVertices;
+		meshes[i].num_index = ai_scene->mMeshes[i]->mNumFaces * 3;
 
-		updateBounds(vert.position, minPos, maxPos);
+		num_vertices += meshes[i].num_vertex;
+		num_indices += meshes[i].num_index;
 	}
 
-	// Initialize indices
-	for (size_t i = 0; i < ai_mesh->mNumFaces; i++)
+	positions.reserve(num_vertices);
+	normals.reserve(num_vertices);
+	uvs.reserve(num_vertices);
+	indices.reserve(num_indices);
+
+	for (size_t i = 0; i < ai_scene->mNumMeshes; ++i)
 	{
-		const aiFace& face = ai_mesh->mFaces[i];
-		assert(face.mNumIndices == 3);
-		indices.push_back(face.mIndices[0]);
-		indices.push_back(face.mIndices[1]);
-		indices.push_back(face.mIndices[2]);
+		aiMesh* ai_mesh = ai_scene->mMeshes[i];
+
+		const aiVector3D  zero{ 0.0f, 0.0f, 0.0f };
+		for (size_t i = 0; i < ai_mesh->mNumVertices; ++i)
+		{
+			const aiVector3D* pos = &(ai_mesh->mVertices[i]);
+			const aiVector3D* normal = &(ai_mesh->mNormals[i]);
+			const aiVector3D* text = ai_mesh->HasTextureCoords(0) ? &(ai_mesh->mTextureCoords[0][i]) : &zero;
+
+			positions.emplace_back( pos->x, pos->y, pos->z );
+			normals.emplace_back( normal->x, normal->y, normal->z );
+			uvs.emplace_back(text->x, text->y);
+			
+			updateBounds(positions.back(), minPos, maxPos);
+		}
+
+		// Initialize indices
+		for (size_t i = 0; i < ai_mesh->mNumFaces; i++)
+		{
+			const aiFace& face = ai_mesh->mFaces[i];
+			assert(face.mNumIndices == 3);
+			indices.push_back(face.mIndices[0]);
+			indices.push_back(face.mIndices[1]);
+			indices.push_back(face.mIndices[2]);
+		}
 	}
 
-	Mesh* entry = new Mesh{ vertices, indices };
+	// Normalize all the positions
+	normalizeMeshes(positions);
+	initMeshBuffers(positions, normals, uvs, indices);
 
-	meshes.emplace_back(entry);
 }
 
-void Model::normalizeMeshes()
+void Model::normalizeMeshes(std::vector<glm::vec3>& pos)
 {
 	// Normalizing the meshes
 	glm::vec3 transVec = (maxPos + minPos) * 0.5f;
@@ -153,71 +161,49 @@ void Model::normalizeMeshes()
 	minPos = normalizeMat * glm::vec4{ minPos, 1.0f };
 	maxPos = normalizeMat * glm::vec4{ maxPos, 1.0f };
 
-	for (auto& mesh : meshes)
+	for (auto& p : pos)
 	{
-		for (auto& vert : mesh->vertices)
-		{
-			vert.position = normalizeMat * glm::vec4{ vert.position, 1.0f };
-		}
+		p = normalizeMat * glm::vec4{ p, 1.0f };
 	}
 }
 
-void Model::initMeshBuffers()
+void Model::initMeshBuffers(const std::vector<glm::vec3>& pos, const std::vector<glm::vec3>& norm, const std::vector<glm::vec2>& uv, const std::vector<unsigned>& indices)
 {
 	// Create the VAO for the object itself
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 
-	for (auto& entry : meshes)
-	{
-			// Creating the EBO
-		glGenBuffers(1, &entry->ibo);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, entry->ibo);
-		glBufferData(	GL_ELEMENT_ARRAY_BUFFER, entry->indices.size() * sizeof(unsigned),
-						entry->indices.data(), GL_STATIC_DRAW);
+	// Creating the VBO for vertices.
+	glGenBuffers(5, buffers);
 
-		// Creating the VBO for vertices.
-		glGenBuffers(1, &entry->vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, entry->vbo);
-		glBufferData(	GL_ARRAY_BUFFER, entry->vertices.size() * sizeof(Vertex),
-						entry->vertices.data(), GL_STATIC_DRAW);
-		// Position
-		glVertexAttribPointer(	0,
-								3,
-								GL_FLOAT,
-								GL_FALSE,
-								sizeof(Vertex),
-								(void *)(0));
-		glEnableVertexAttribArray(0);
+	// Creating the EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[INDEX_BUFFER]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned), indices.data(), GL_STATIC_DRAW);
 
-		// Normals
-		glVertexAttribPointer(	1,
-								3,
-								GL_FLOAT,
-								GL_FALSE,
-								sizeof(Vertex),
-								(void *)(sizeof(glm::vec3)));
-		glEnableVertexAttribArray(1);
+	// Position
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[POS_VB]);
+	glBufferData(GL_ARRAY_BUFFER, pos.size() * sizeof(glm::vec3), pos.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-		// UVs
-		glVertexAttribPointer(	2,
-								2,
-								GL_FLOAT,
-								GL_FALSE,
-								sizeof(Vertex),
-								(void *)(sizeof(glm::vec3) * 2));
-		glEnableVertexAttribArray(2);
-	}
-	
+	// Normal
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[NORMAL_VB]);
+	glBufferData(GL_ARRAY_BUFFER, norm.size() * sizeof(glm::vec3), norm.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	// UVs
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[TEXCOORD_VB]);
+	glBufferData(GL_ARRAY_BUFFER, uv.size() * sizeof(glm::vec2), uv.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[POS_VB]);
+	// glBufferData(GL_ELEMENT_ARRAY_BUFFER, pos.size() * sizeof(glm::vec3), pos.data(), GL_STATIC_DRAW);
+	// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	// Position
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 }
-
-void Model::normalizeAndCalcMeshNormals()
-{
-	
-
-	
-}
-
 
 void Model::updateBounds(const glm::vec3 & pos, glm::vec3& minPos, glm::vec3& maxPos)const
 {

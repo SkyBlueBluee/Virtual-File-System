@@ -11,11 +11,11 @@ int CS300_A1::Init()
 	objects.reserve(10);
 	Object obj{};
 	obj.modelID = currModel = "Running";
-	obj.scale = glm::vec3{ 1,1 ,1 };
+	obj.scale = glm::vec3{ 1.5,1.5 ,1.5 };
 	objects.push_back(obj);
 
 	Light light;
-	light.modelID = "icosphere";
+	light.modelID = "sphere";
 	light.diffuse = glm::vec3{ 1,1,1 };
 	light.type = Light::POINT;
 	light.position = glm::vec3{0, 3, 3};
@@ -29,9 +29,8 @@ int CS300_A1::Init()
 	// Setup camera positions and misc variables
 	Engine::Instance()->GetSystem<Camera>()->position = glm::vec3{ 0,0,6 };
 	models = Engine::Instance()->GetSystem<Graphics>()->GetModelManager()->GetAllModels();
-	
 
-	setUpSkybox();
+	// setUpSkybox();
 	return 0;
 }
 
@@ -47,7 +46,7 @@ int CS300_A1::Render(float dt)
 	PreRender(dt);
 
 	// Draw skybox first
-	drawSkybox();
+	// drawSkybox();
 
 	drawPhong();
 

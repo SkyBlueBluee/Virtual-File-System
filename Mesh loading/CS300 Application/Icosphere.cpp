@@ -127,7 +127,7 @@ void Icosphere::computeIcosahedron()
 	subdivideIcosahedron(icosahedron, icosahedronIndices);
 
 	// Mesh setup
-	Mesh* mesh = new Mesh{ icosahedron ,icosahedronIndices };
+	Mesh mesh = new Mesh{ icosahedron ,icosahedronIndices };
 	
 	meshes.emplace_back(mesh);
 

@@ -18,6 +18,8 @@ struct Vertex {
 };
 
 
+
+
 struct Model
 {
 	Model();
@@ -37,26 +39,46 @@ struct Model
 	std::string path;
 
 protected:
-	
-	GLuint VAO = 0;
+	enum VB_TYPES {
+		INDEX_BUFFER,
+		POS_VB,
+		NORMAL_VB,
+		TEXCOORD_VB,
+		// BONE_VB,
+		NUM_VBs
+	};
 
 	struct Mesh
 	{
-		std::vector<Vertex> vertices;
-		std::vector<unsigned> indices;
-
-		GLuint vbo;
-		GLuint ibo;
+		// std::vector<Vertex> vertices;
+		// std::vector<unsigned> indices;
+		unsigned base_vertex;
+		unsigned base_index;
+		unsigned num_vertex;
+		unsigned num_index;
 		unsigned texture_index;
 	};
-	std::vector<Mesh*> meshes;
-	int blah;
+
+	struct BoneData
+	{
+		void addBoneData(int id, float weight);
+		int ids[4]{};
+		float weights[4]{};
+	};
+
+	GLuint vao = 0;
+	GLuint buffers[NUM_VBs]{};
+	GLuint ibo = 0;
+
+	std::vector<Mesh> meshes;
+	std::map<std::string, int> bone_map;
+	std::vector<BoneData> bone_data;
 
 	glm::vec3 minPos = glm::vec3{}, maxPos = glm::vec3{};
 
-	void initMesh(const aiMesh* ai_mesh);
-	void normalizeMeshes();
-	void initMeshBuffers();
+	void initMeshes(const aiScene* ai_scene);
+	void normalizeMeshes(std::vector<glm::vec3>& pos);
+	void initMeshBuffers(const std::vector<glm::vec3>& pos, const std::vector<glm::vec3>& norm, const std::vector<glm::vec2>& uv, const std::vector<unsigned>& indices);
 	void normalizeAndCalcMeshNormals();
 	void updateBounds(const glm::vec3& pos, glm::vec3& minPos, glm::vec3& maxPos) const;
 	

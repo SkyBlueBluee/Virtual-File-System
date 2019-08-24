@@ -118,9 +118,6 @@
     <ClCompile Include="ModelManager.cpp">
       <Filter>Source Files\Graphics\Mesh/Model</Filter>
     </ClCompile>
-    <ClCompile Include="Icosphere.cpp">
-      <Filter>Source Files\Graphics\Mesh/Model</Filter>
-    </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source Files\Scenes\Objects</Filter>
     </ClCompile>
@@ -129,12 +126,6 @@
     </ClCompile>
     <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files\Graphics\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="FramebufferManager.cpp">
-      <Filter>Source Files\Graphics\Framebuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="Framebuffer.cpp">
-      <Filter>Source Files\Graphics\Framebuffer</Filter>
     </ClCompile>
     <ClCompile Include="..\dep\stbi_image.cpp">
       <Filter>dep</Filter>
@@ -168,9 +159,6 @@
     <ClInclude Include="Graphics.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Framebuffer.h">
-      <Filter>Source Files\Graphics\Framebuffer</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Source Files\Camera</Filter>
     </ClInclude>
@@ -186,9 +174,6 @@
     <ClInclude Include="CS300_A1.h">
       <Filter>Source Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Icosphere.h">
-      <Filter>Source Files\Graphics\Mesh/Model</Filter>
-    </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
@@ -203,9 +188,6 @@
     </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>Source Files\Graphics\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="FramebufferManager.h">
-      <Filter>Source Files\Graphics\Framebuffer</Filter>
     </ClInclude>
     <ClInclude Include="..\dep\stb_image.h">
       <Filter>dep</Filter>
