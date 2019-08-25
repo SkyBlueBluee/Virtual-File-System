@@ -11,15 +11,15 @@ int CS300_A1::Init()
 	objects.reserve(10);
 	Object obj{};
 	obj.modelID = currModel = "Running";
-	obj.scale = glm::vec3{ 1.5,1.5 ,1.5 };
+	obj.scale = glm::vec3{ 0.1,0.1,0.1 };
 	objects.push_back(obj);
 
 	Light light;
-	light.modelID = "sphere";
+	light.modelID = "Running";
 	light.diffuse = glm::vec3{ 1,1,1 };
 	light.type = Light::POINT;
 	light.position = glm::vec3{0, 3, 3};
-	light.scale = glm::vec3{0.5, 0.5, 0.5};
+	light.scale = glm::vec3{0.1, 0.1, 0.1};
 	light.direction = light.position;
 	lights.push_back(light);
 	lights[0].isOn = true;
@@ -48,10 +48,10 @@ int CS300_A1::Render(float dt)
 	// Draw skybox first
 	// drawSkybox();
 
-	drawPhong();
+	drawPhong(dt);
 
 	// Draw lights
-	drawLights();
+	// drawLights();
 
 	return 0;
 }
@@ -67,7 +67,7 @@ void CS300_A1::Shutdown()
 }
 
 #pragma region Draw Functions
-void CS300_A1::drawPhong()
+void CS300_A1::drawPhong(float dt)
 {
 	Graphics* graphics = Engine::Instance()->GetSystem<Graphics>();
 	glEnable(GL_DEPTH_TEST);
@@ -95,7 +95,7 @@ void CS300_A1::drawPhong()
 		shader->SetMat4("modelToView", view * model);
 		shader->SetMat4("MVP", MVP);
 
-		obj.Draw();
+		obj.Draw(shader, dt);
 	}
 }
 
@@ -206,7 +206,7 @@ void CS300_A1::drawLights()
 
 		shader->SetMat4("vertexTransform", MVP);
 		shader->SetVec3("objectColor", light.diffuse);
-		light.Draw();
+		light.Draw(shader, 0.0f);
 	}
 }
 
@@ -224,7 +224,7 @@ void CS300_A1::drawLights(const glm::mat4 view, const glm::mat4 perps)
 
 		shader->SetMat4("vertexTransform", MVP);
 		shader->SetVec3("objectColor", light.diffuse);
-		light.Draw();
+		light.Draw(shader, 0.0f);
 	}
 }
 

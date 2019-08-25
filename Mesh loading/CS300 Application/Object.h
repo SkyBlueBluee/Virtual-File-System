@@ -2,6 +2,7 @@
 #include <string>
 
 #include "Model.h"
+#include "Shader.h"
 #include "GraphicsIncludes.h"
 
 // Just a container to hold all the object data.
@@ -13,7 +14,7 @@ struct Object
 	glm::mat4 GetNormalMat();
 	
 	// Draw functions
-	int Draw();
+	int Draw(Shader* shader, float dt);
 	
 	// Varialbes
 	glm::vec3 scale{1,1,1};

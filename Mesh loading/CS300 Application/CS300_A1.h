@@ -18,7 +18,7 @@ struct CS300_A1 : public IScene
 private:
 	int currMaxTexture = -1;
 	// For drawing the objects
-	void drawPhong();
+	void drawPhong(float dt);
 	void setLightVariables(Shader* s);
 	void drawLights();
 	void drawLights(const glm::mat4 view, const glm::mat4 perps);

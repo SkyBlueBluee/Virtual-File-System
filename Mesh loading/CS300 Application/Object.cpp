@@ -21,11 +21,12 @@ glm::mat4 Object::GetNormalMat()
 	return	glm::inverse(glm::rotate(angle, axis) * glm::scale(scale));
 }
 
-int Object::Draw()
+int Object::Draw(Shader* shader, float dt)
 {
 	// Draw the object as per normal.
 	Model* model = Engine::Instance()->GetSystem<Graphics>()->GetModel(modelID);
 	assert(model != nullptr);
-	return model->Draw();
+	model->BoneTransform("mixamo.com", dt);
+	return model->Draw(shader);
 }
 
