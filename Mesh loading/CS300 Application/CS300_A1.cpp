@@ -11,7 +11,7 @@ int CS300_A1::Init()
 	objects.reserve(10);
 	Object obj{};
 	obj.modelID = currModel = "Running";
-	obj.scale = glm::vec3{ 0.1,0.1,0.1 };
+	obj.scale = glm::vec3{ 0.01,0.01,0.01 };
 	objects.push_back(obj);
 
 	Light light;

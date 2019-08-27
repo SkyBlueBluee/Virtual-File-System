@@ -71,7 +71,7 @@ int Model::LoadModel(const std::string & path)
 
 void Model::BoneTransform(std::string anim_name, float time)
 {
-	auto anim_seq = animation_sequences.find(anim_name);
+	auto anim_seq = animation_sequences.begin();
 	if (anim_seq == animation_sequences.end())
 		return;
 
@@ -80,7 +80,7 @@ void Model::BoneTransform(std::string anim_name, float time)
 	float ticks = elapsed * anim_seq->second.fps;
 	float anim_time = fmod(ticks, anim_seq->second.num_ticks);
 	glm::mat4 mat{ 1.0f };
-	recurseNodeHeirarchy(anim_seq->second, ai_scene->mRootNode, 0.0f, mat);
+	recurseNodeHeirarchy(anim_seq->second, ai_scene->mRootNode, anim_time, mat);
 }
 
 int Model::Draw(Shader* shader)
@@ -168,7 +168,7 @@ void Model::initMeshes()
 	}
 
 	// Normalize all the positions
-	normalizeMeshes(positions);
+	// normalizeMeshes(positions);
 	initMeshBuffers(positions, normals, uvs, indices);
 	
 	initAnimMaps();
@@ -265,8 +265,11 @@ void Model::recurseNodeHeirarchy(const AnimationSequence& anim_nodes, const aiNo
 	auto bone_res = bone_map.find(node_name);
 	if (bone_res != bone_map.end())
 	{
-		glm::mat4 test = global_transform * bone_info[bone_res->second].offset;
-		bone_info[bone_res->second].final_transform = global_inverse * global_transform * bone_info[bone_res->second].offset;
+		glm::vec3 v{ -1, 1, -1 };
+		glm::mat4 m = glm::rotate(glm::radians(45.0f), glm::vec3{ 1, 0, 0 });
+		glm::mat4 test = glm::translate(glm::vec3{ 0, 5, 0 }) * m * glm::translate(glm::vec3{ 0, -5, 0 });
+		v = (test * glm::vec4{ v, 1.0f });
+		bone_info[bone_res->second].final_transform = global_inverse * parent_transform * node_transform * bone_info[bone_res->second].offset;
 	}
 
 	for (unsigned i = 0; i < node->mNumChildren; ++i)

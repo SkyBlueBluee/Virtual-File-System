@@ -11,6 +11,7 @@ Engine* Engine::instance = new Engine{};
 int Engine::Init()
 {
 	// Add all systems here
+
 	systems_vec.reserve(5);		// At least 5 systems
 	AddSystem<Graphics>();		// Should be first as graphics will create context
 
